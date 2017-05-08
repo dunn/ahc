@@ -13,6 +13,16 @@ class CatalogController < ApplicationController
     solr_name('system_modified', :stored_sortable, type: :date)
   end
 
+  # Turn off SMS
+  # https://groups.google.com/d/msg/blacklight-development/l_zHRF_GQc8/_qUUbJSs__YJ
+  CatalogController.blacklight_config.show.document_actions.delete(:sms)
+
+  # TODO: re-implement this functionality
+  # https://github.library.ucsb.edu/ADRL/alexandria/pull/29
+  # https://help.library.ucsb.edu/browse/DIGREPO-504
+  CatalogController.blacklight_config.show.document_actions.delete(:email)
+  CatalogController.blacklight_config.show.document_actions.delete(:citation)
+
   configure_blacklight do |config|
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
@@ -87,22 +97,39 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name("title", :stored_searchable), label: "Title"
-    config.add_show_field solr_name("description", :stored_searchable), label: "Description"
-    config.add_show_field solr_name("keyword", :stored_searchable), label: "Keyword"
-    config.add_show_field solr_name("subject", :stored_searchable), label: "Subject"
-    config.add_show_field solr_name("creator", :stored_searchable), label: "Creator"
-    config.add_show_field solr_name("contributor", :stored_searchable), label: "Contributor"
-    config.add_show_field solr_name("publisher", :stored_searchable), label: "Publisher"
-    config.add_show_field solr_name("based_near", :stored_searchable), label: "Location"
-    config.add_show_field solr_name("language", :stored_searchable), label: "Language"
-    config.add_show_field solr_name("date_uploaded", :stored_searchable), label: "Date Uploaded"
-    config.add_show_field solr_name("date_modified", :stored_searchable), label: "Date Modified"
-    config.add_show_field solr_name("date_created", :stored_searchable), label: "Date Created"
-    config.add_show_field solr_name("rights", :stored_searchable), label: "Rights"
-    config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
-    config.add_show_field solr_name("format", :stored_searchable), label: "File Format"
-    config.add_show_field solr_name("identifier", :stored_searchable), label: "Identifier"
+    config.add_show_field solr_name('based_near', :stored_searchable),
+                          label: 'Location'
+    config.add_show_field solr_name('contributor', :stored_searchable),
+                          label: 'Contributor'
+
+    config.add_show_field solr_name('composer', :stored_searchable),
+                          label: 'Composer'
+    config.add_show_field solr_name('composition_date', :stored_searchable),
+                          label: 'Composition Date'
+
+    config.add_show_field solr_name('creator', :stored_searchable),
+                          label: 'Creator'
+    config.add_show_field solr_name('date_created', :stored_searchable),
+                          label: 'Date Created'
+    config.add_show_field solr_name('date_modified', :stored_searchable),
+                          label: 'Date Modified'
+    config.add_show_field solr_name('date_uploaded', :stored_searchable),
+                          label: 'Date Uploaded'
+    config.add_show_field solr_name('description', :stored_searchable),
+                          label: 'Description'
+    config.add_show_field solr_name('format', :stored_searchable),
+                          label: 'File Format'
+
+    config.add_show_field solr_name('genre', :stored_searchable), label: 'Genre'
+
+    config.add_show_field solr_name('identifier', :stored_searchable), label: 'Identifier'
+    config.add_show_field solr_name('keyword', :stored_searchable), label: 'Keyword'
+    config.add_show_field solr_name('language', :stored_searchable), label: 'Language'
+    config.add_show_field solr_name('publisher', :stored_searchable), label: 'Publisher'
+    config.add_show_field solr_name('resource_type', :stored_searchable), label: 'Resource Type'
+    config.add_show_field solr_name('rights', :stored_searchable), label: 'Rights'
+    config.add_show_field solr_name('subject', :stored_searchable), label: 'Subject'
+    config.add_show_field solr_name('title', :stored_searchable), label: 'Title'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

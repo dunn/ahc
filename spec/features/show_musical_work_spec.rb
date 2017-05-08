@@ -14,13 +14,13 @@ RSpec.feature 'Display a musical work' do
     end
   end
 
-  context "with a public work" do
-    it "displays all the fields" do
-      visit(hyrax_musical_work_path(work.id))
-      expect(page).to have_content("Song")
-      expect(page).to have_content("Joe Schmo")
-      expect(page).to have_content("Pop")
-      expect(page).to have_content("today")
+  context 'with a public work' do
+    it 'displays all the fields' do
+      visit(catalog_id_path(work.id))
+      expect(page).to have_content('Song')
+      expect(page).to have_content('Joe Schmo')
+      expect(page).to have_content('Pop')
+      expect(page).to have_content('today')
     end
   end
 end

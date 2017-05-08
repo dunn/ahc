@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SolrDocument
   include Blacklight::Solr::Document
   include Blacklight::Gallery::OpenseadragonSolrDocument
@@ -22,7 +23,23 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
 
-  # Do content negotiation for AF models. 
+  # Do content negotiation for AF models.
 
-  use_extension( Hydra::ContentNegotiation )
+  use_extension(Hydra::ContentNegotiation)
+
+  def to_model
+    @model ||= ModelWrapper.new(ActiveFedora::Base.find(id).class, id)
+  end
+
+  def composer
+    fetch('composer_tesim', [])
+  end
+
+  def composition_date
+    fetch('composition_date_tesim', [])
+  end
+
+  def genre
+    fetch('genre_tesim', [])
+  end
 end
